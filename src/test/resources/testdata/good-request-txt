@@ -1,0 +1,23 @@
+#
+# Copyright (c) 2015 Respect Network Corp. All Rights Reserved.
+#
+# $Id: good-request-txt,v 1.1.1.1 2015/07/27 05:16:15 zhang Exp $
+#
+# This file is for generating java code in ApiTestRequest.java
+#
+# @author Ning Zhang ning@respectnetwork.net
+# @version $Revision: 1.1.1.1 $
+#
+BASEURL   /api/proxies
+#
+1000 proxy:GetStatus       /status                             GET    ROOT ADMIN CSR GUI
+1001 proxy:ListDetails     /details                            GET    ROOT ADMIN CSR GUI
+#
+1100 proxy:LoginGuardian   /guardians/                         POST   USER
+1101 proxy:ListDependents  /guardians/{cloudName}/dependents   POST   USER
+#
+BASEURL   /api/chats
+#
+9000 chat:ListConnections   /connections                       POST   USER
+9001 chat:CreateConnections /connections/{cloudName}           POST   USER
+9001 chat:DeleteConnections /connections/{cloudName}           DELETE USER

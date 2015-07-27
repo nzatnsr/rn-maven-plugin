@@ -1,0 +1,102 @@
+/*
+ * Copyright (c) 2015 Respect Network Corp. All Rights Reserved.
+ */
+package net.respectnetwork.api.request;
+
+import java.util.*;
+
+/**
+ * The <code>ApiTestRequest</code> class defines all API requests to be
+ * processed by API server
+ *
+ * @author Ning Zhang ning@respectnetwork.net
+ * @version 1.0
+ */
+public class ApiTestRequest
+{
+	private int          id;
+	private String       name;
+	private String       method;
+	private String       url;
+	private List<String> roles;
+
+	public ApiTestRequest()
+	{
+		this.id = -1;
+		this.name = null;
+		this.method = null;
+		this.url = null;
+		this.roles = new ArrayList<String>();
+	}
+
+	public int getId()
+	{
+		return this.id;
+	}
+
+	public void setId( int id )
+	{
+		this.id = id;
+	}
+
+	public String getName()
+	{
+		return this.name;
+	}
+
+	public void setName( String name )
+	{
+		this.name = name;
+	}
+
+	public String getMethod()
+	{
+		return this.method;
+	}
+
+	public void setMethod( String method )
+	{
+		this.method = method;
+	}
+
+	public String getUrl()
+	{
+		return this.url;
+	}
+
+	public void setUrl( String url )
+	{
+		this.url = url;
+	}
+
+	public List<String> getRoles()
+	{
+		return this.roles;
+	}
+
+	public void setRoles( List<String> roles )
+	{
+		this.roles = roles;
+	}
+
+	private static HashMap<String, ApiTestRequest> controlMap = null;
+	private static HashMap<Integer, ApiTestRequest> requestMap = null;
+
+	public static boolean isAllowed( String role, int id )
+	{
+		ApiTestRequest req = controlMap.get(role + ":" + id);
+		return req != null;
+	}
+
+	public static ApiTestRequest get( int id )
+	{
+		ApiTestRequest req = requestMap.get(id);
+		return req;
+	}
+
+        // NOTE: The following are generated code. Please do not edit them manually!
+
+        // @GeneratedCode
+
+        // END of generated code
+}

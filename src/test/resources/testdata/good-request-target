@@ -1,0 +1,192 @@
+/*
+ * Copyright (c) 2015 Respect Network Corp. All Rights Reserved.
+ */
+package net.respectnetwork.api.request;
+
+import java.util.*;
+
+/**
+ * The <code>ApiTestRequest</code> class defines all API requests to be
+ * processed by API server
+ *
+ * @author Ning Zhang ning@respectnetwork.net
+ * @version 1.0
+ */
+public class ApiTestRequest
+{
+	private int          id;
+	private String       name;
+	private String       method;
+	private String       url;
+	private List<String> roles;
+
+	public ApiTestRequest()
+	{
+		this.id = -1;
+		this.name = null;
+		this.method = null;
+		this.url = null;
+		this.roles = new ArrayList<String>();
+	}
+
+	public int getId()
+	{
+		return this.id;
+	}
+
+	public void setId( int id )
+	{
+		this.id = id;
+	}
+
+	public String getName()
+	{
+		return this.name;
+	}
+
+	public void setName( String name )
+	{
+		this.name = name;
+	}
+
+	public String getMethod()
+	{
+		return this.method;
+	}
+
+	public void setMethod( String method )
+	{
+		this.method = method;
+	}
+
+	public String getUrl()
+	{
+		return this.url;
+	}
+
+	public void setUrl( String url )
+	{
+		this.url = url;
+	}
+
+	public List<String> getRoles()
+	{
+		return this.roles;
+	}
+
+	public void setRoles( List<String> roles )
+	{
+		this.roles = roles;
+	}
+
+	private static HashMap<String, ApiTestRequest> controlMap = null;
+	private static HashMap<Integer, ApiTestRequest> requestMap = null;
+
+	public static boolean isAllowed( String role, int id )
+	{
+		ApiTestRequest req = controlMap.get(role + ":" + id);
+		return req != null;
+	}
+
+	public static ApiTestRequest get( int id )
+	{
+		ApiTestRequest req = requestMap.get(id);
+		return req;
+	}
+
+        // NOTE: The following are generated code. Please do not edit them manually!
+
+	static
+	{
+		controlMap = new HashMap<String, ApiTestRequest>();
+		requestMap = new HashMap<Integer, ApiTestRequest>();
+
+		ApiTestRequest req;
+
+		req = new ApiTestRequest();
+		req.setId(1000);
+		req.setName("proxy:GetStatus");
+		req.setUrl("/api/proxies/status");
+		req.setMethod("GET");
+		req.getRoles().add("ROOT");
+		req.getRoles().add("ADMIN");
+		req.getRoles().add("CSR");
+		req.getRoles().add("GUI");
+		controlMap.put("ROOT:1000", req);
+		controlMap.put("ADMIN:1000", req);
+		controlMap.put("CSR:1000", req);
+		controlMap.put("GUI:1000", req);
+		requestMap.put(1000, req);
+
+		req = new ApiTestRequest();
+		req.setId(1001);
+		req.setName("proxy:ListDetails");
+		req.setUrl("/api/proxies/details");
+		req.setMethod("GET");
+		req.getRoles().add("ROOT");
+		req.getRoles().add("ADMIN");
+		req.getRoles().add("CSR");
+		req.getRoles().add("GUI");
+		controlMap.put("ROOT:1001", req);
+		controlMap.put("ADMIN:1001", req);
+		controlMap.put("CSR:1001", req);
+		controlMap.put("GUI:1001", req);
+		requestMap.put(1001, req);
+
+		req = new ApiTestRequest();
+		req.setId(1100);
+		req.setName("proxy:LoginGuardian");
+		req.setUrl("/api/proxies/guardians/");
+		req.setMethod("POST");
+		req.getRoles().add("USER");
+		controlMap.put("USER:1100", req);
+		requestMap.put(1100, req);
+
+		req = new ApiTestRequest();
+		req.setId(1101);
+		req.setName("proxy:ListDependents");
+		req.setUrl("/api/proxies/guardians/{cloudName}/dependents");
+		req.setMethod("POST");
+		req.getRoles().add("USER");
+		controlMap.put("USER:1101", req);
+		requestMap.put(1101, req);
+
+		req = new ApiTestRequest();
+		req.setId(9000);
+		req.setName("chat:ListConnections");
+		req.setUrl("/api/chats/connections");
+		req.setMethod("POST");
+		req.getRoles().add("USER");
+		controlMap.put("USER:9000", req);
+		requestMap.put(9000, req);
+
+		req = new ApiTestRequest();
+		req.setId(9001);
+		req.setName("chat:CreateConnections");
+		req.setUrl("/api/chats/connections/{cloudName}");
+		req.setMethod("POST");
+		req.getRoles().add("USER");
+		controlMap.put("USER:9001", req);
+		requestMap.put(9001, req);
+
+		req = new ApiTestRequest();
+		req.setId(9001);
+		req.setName("chat:DeleteConnections");
+		req.setUrl("/api/chats/connections/{cloudName}");
+		req.setMethod("DELETE");
+		req.getRoles().add("USER");
+		controlMap.put("USER:9001", req);
+		requestMap.put(9001, req);
+
+	}
+
+	public static final int PROXY_GET_STATUS                                                 = 1000;
+	public static final int PROXY_LIST_DETAILS                                               = 1001;
+	public static final int PROXY_LOGIN_GUARDIAN                                             = 1100;
+	public static final int PROXY_LIST_DEPENDENTS                                            = 1101;
+	public static final int CHAT_LIST_CONNECTIONS                                            = 9000;
+	public static final int CHAT_CREATE_CONNECTIONS                                          = 9001;
+	public static final int CHAT_DELETE_CONNECTIONS                                          = 9001;
+
+        // END of generated code
+}

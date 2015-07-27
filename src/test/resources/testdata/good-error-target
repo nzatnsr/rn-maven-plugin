@@ -1,0 +1,254 @@
+/*
+ * Copyright (c) 2015 Respect Network Corp. All Rights Reserved.
+ */
+package net.respectnetwork.api.common;
+
+import java.util.*;
+
+import org.apache.commons.lang3.tuple.*;
+import org.apache.commons.collections.*;
+import org.apache.commons.collections.keyvalue.*;
+
+/**
+ * The <code>ApiTestError</code> class encapsulates errors occurred in API code base
+ *
+ * @author Ning Zhang ning@respectnetwork.net
+ * @version 1.0
+ */
+public class ApiTestError
+{
+	private int                        httpStatusCode;
+	private String                     errorId;
+	private String                     languageId;
+	private String                     reason;
+	private String                     errorLink;
+	private List<KeyValue>             parameters;
+
+	private static final String	               DEFAULT_LANGUAGE_Id = "en_US";
+	private static HashMap<String, ApiTestError> errorMap = new HashMap<String, ApiTestError>();
+
+	private ApiTestError()
+	{
+		this.httpStatusCode = 0;
+		this.errorId = null;
+		this.languageId = DEFAULT_LANGUAGE_Id;
+		this.reason = null;
+		this.errorLink = null;
+		this.parameters = null;
+	}
+
+	public static boolean hasErrorId( List<ApiTestError> list, String errorId )
+	{
+		if( list != null )
+		{
+			for( ApiTestError error : list )
+			{
+				if( errorId.equals(error.getErrorId()) == true )
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public int getHttpStatusCode()
+	{
+		return this.httpStatusCode;
+	}
+
+	public void setHttpStatusCode( int httpStatusCode )
+	{
+		this.httpStatusCode = httpStatusCode;
+	}
+
+	public String getErrorId()
+	{
+		return this.errorId;
+	}
+
+	public void setErrorId( String errorId )
+	{
+		this.errorId = errorId;
+	}
+
+	public String getLanguageId()
+	{
+		return this.languageId;
+	}
+
+	public void setLanguageId( String languageId )
+	{
+		this.languageId = languageId;
+	}
+
+	public String getReason()
+	{
+		return this.reason;
+	}
+
+	public void setReason( String reason )
+	{
+		this.reason = reason;
+	}
+
+	public List<KeyValue> getParameters()
+	{
+		if( this.parameters == null )
+		{
+			this.parameters = new ArrayList<KeyValue>();
+		}
+		return this.parameters;
+	}
+
+	public ApiTestError addParameter( String name, String value )
+	{
+		this.getParameters().add(new DefaultKeyValue(name, value));
+		return this;
+	}
+
+	public ApiTestError addParameter( Exception ex )
+	{
+		this.getParameters().add(new DefaultKeyValue(ex.getClass().getName(), ex.getMessage()));
+		return this;
+	}
+
+	public String getErrorLink()
+	{
+		return this.errorLink;
+	}
+
+	public void setErrorLink( String errorLink )
+	{
+		this.errorLink = errorLink;
+	}
+
+	public static ApiTestError get( String errorId )
+	{
+		return ApiTestError.get(errorId, DEFAULT_LANGUAGE_Id);
+	}
+
+	private ApiTestError duplicate()
+	{
+		ApiTestError rtn = new ApiTestError();
+		rtn.setLanguageId(this.getLanguageId());
+		rtn.setErrorId(this.getErrorId());
+		rtn.setReason(this.getReason());
+		rtn.setErrorLink(this.getErrorLink());
+		rtn.setHttpStatusCode(this.getHttpStatusCode());
+		return rtn;
+	}
+
+	public static ApiTestError get( String errorId, String languageId )
+	{
+		ApiTestError rtn = errorMap.get(languageId + ":" + errorId);
+		if( (rtn == null) && (DEFAULT_LANGUAGE_Id.equals(languageId) == false) )
+		{
+			rtn = errorMap.get(DEFAULT_LANGUAGE_Id + ":" + errorId);
+		}
+		if( rtn == null )
+		{
+			rtn = new ApiTestError();
+			rtn.setLanguageId(languageId);
+			rtn.setErrorId(errorId);
+			rtn.setHttpStatusCode(javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+		else
+		{
+			rtn = rtn.duplicate();
+		}
+		return rtn;
+	}
+
+	// NOTE: The following are generated code. Please do not edit them manually!
+
+	static
+	{
+		ApiTestError err;
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(500);
+		err.setLanguageId("en_US");
+		err.setErrorId("InternalServerError");
+		err.setReason("Internal server error");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/InternalServerError.html");
+		errorMap.put("en_US:InternalServerError", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(500);
+		err.setLanguageId("en_US");
+		err.setErrorId("InternalServerErrorRetry");
+		err.setReason("Internal server error, please retry");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/InternalServerErrorRetry.html");
+		errorMap.put("en_US:InternalServerErrorRetry", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(500);
+		err.setLanguageId("en_US");
+		err.setErrorId("InternalServerErrorRetryDatastore");
+		err.setReason("Internal server error in accessing datastore, please retry");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/InternalServerErrorRetryDatastore.html");
+		errorMap.put("en_US:InternalServerErrorRetryDatastore", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(200);
+		err.setLanguageId("en_US");
+		err.setErrorId("CloudNameUpdated");
+		err.setReason("Cloud name updated successfully");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/CloudNameUpdated.html");
+		errorMap.put("en_US:CloudNameUpdated", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(400);
+		err.setLanguageId("en_US");
+		err.setErrorId("CloudNameNotFound");
+		err.setReason("Cloud name does not exist");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/CloudNameNotFound.html");
+		errorMap.put("en_US:CloudNameNotFound", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(403);
+		err.setLanguageId("en_US");
+		err.setErrorId("CouldNameNotAccessible");
+		err.setReason("Cloud name could not be accessible");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/CouldNameNotAccessible.html");
+		errorMap.put("en_US:CouldNameNotAccessible", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(400);
+		err.setLanguageId("en_US");
+		err.setErrorId("chat:ClouldNameNotFound");
+		err.setReason("Chat target cloud name does not exist");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/chat:ClouldNameNotFound.html");
+		errorMap.put("en_US:chat:ClouldNameNotFound", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(400);
+		err.setLanguageId("en_US");
+		err.setErrorId("proxy:GuardianNotFound");
+		err.setReason("Guardian cloud name does not exist");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/proxy:GuardianNotFound.html");
+		errorMap.put("en_US:proxy:GuardianNotFound", err);
+
+		err = new ApiTestError();
+		err.setHttpStatusCode(400);
+		err.setLanguageId("en_US");
+		err.setErrorId("prov:ApiKeyInvalid");
+		err.setReason("API key is not valid");
+		err.setErrorLink("https://www.respectnetwork.net/api/test/error/en_US/prov:ApiKeyInvalid.html");
+		errorMap.put("en_US:prov:ApiKeyInvalid", err);
+
+	}
+
+	public static final String INTERNAL_SERVER_ERROR                                            = "InternalServerError";
+	public static final String INTERNAL_SERVER_ERROR_RETRY                                      = "InternalServerErrorRetry";
+	public static final String INTERNAL_SERVER_ERROR_RETRY_DATASTORE                            = "InternalServerErrorRetryDatastore";
+	public static final String CLOUD_NAME_UPDATED                                               = "CloudNameUpdated";
+	public static final String CLOUD_NAME_NOT_FOUND                                             = "CloudNameNotFound";
+	public static final String COULD_NAME_NOT_ACCESSIBLE                                        = "CouldNameNotAccessible";
+	public static final String CHAT_CLOULD_NAME_NOT_FOUND                                       = "chat:ClouldNameNotFound";
+	public static final String PROXY_GUARDIAN_NOT_FOUND                                         = "proxy:GuardianNotFound";
+	public static final String PROV_API_KEY_INVALID                                             = "prov:ApiKeyInvalid";
+
+	// END of generated code
+}

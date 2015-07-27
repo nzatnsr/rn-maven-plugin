@@ -1,0 +1,168 @@
+/*
+ * Copyright (c) 2015 Respect Network Corp. All Rights Reserved.
+ */
+package net.respectnetwork.api.common;
+
+import java.util.*;
+
+import org.apache.commons.lang3.tuple.*;
+import org.apache.commons.collections.*;
+import org.apache.commons.collections.keyvalue.*;
+
+/**
+ * The <code>ApiTestError</code> class encapsulates errors occurred in API code base
+ *
+ * @author Ning Zhang ning@respectnetwork.net
+ * @version 1.0
+ */
+public class ApiTestError
+{
+	private int                        httpStatusCode;
+	private String                     errorId;
+	private String                     languageId;
+	private String                     reason;
+	private String                     errorLink;
+	private List<KeyValue>             parameters;
+
+	private static final String	               DEFAULT_LANGUAGE_Id = "en_US";
+	private static HashMap<String, ApiTestError> errorMap = new HashMap<String, ApiTestError>();
+
+	private ApiTestError()
+	{
+		this.httpStatusCode = 0;
+		this.errorId = null;
+		this.languageId = DEFAULT_LANGUAGE_Id;
+		this.reason = null;
+		this.errorLink = null;
+		this.parameters = null;
+	}
+
+	public static boolean hasErrorId( List<ApiTestError> list, String errorId )
+	{
+		if( list != null )
+		{
+			for( ApiTestError error : list )
+			{
+				if( errorId.equals(error.getErrorId()) == true )
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public int getHttpStatusCode()
+	{
+		return this.httpStatusCode;
+	}
+
+	public void setHttpStatusCode( int httpStatusCode )
+	{
+		this.httpStatusCode = httpStatusCode;
+	}
+
+	public String getErrorId()
+	{
+		return this.errorId;
+	}
+
+	public void setErrorId( String errorId )
+	{
+		this.errorId = errorId;
+	}
+
+	public String getLanguageId()
+	{
+		return this.languageId;
+	}
+
+	public void setLanguageId( String languageId )
+	{
+		this.languageId = languageId;
+	}
+
+	public String getReason()
+	{
+		return this.reason;
+	}
+
+	public void setReason( String reason )
+	{
+		this.reason = reason;
+	}
+
+	public List<KeyValue> getParameters()
+	{
+		if( this.parameters == null )
+		{
+			this.parameters = new ArrayList<KeyValue>();
+		}
+		return this.parameters;
+	}
+
+	public ApiTestError addParameter( String name, String value )
+	{
+		this.getParameters().add(new DefaultKeyValue(name, value));
+		return this;
+	}
+
+	public ApiTestError addParameter( Exception ex )
+	{
+		this.getParameters().add(new DefaultKeyValue(ex.getClass().getName(), ex.getMessage()));
+		return this;
+	}
+
+	public String getErrorLink()
+	{
+		return this.errorLink;
+	}
+
+	public void setErrorLink( String errorLink )
+	{
+		this.errorLink = errorLink;
+	}
+
+	public static ApiTestError get( String errorId )
+	{
+		return ApiTestError.get(errorId, DEFAULT_LANGUAGE_Id);
+	}
+
+	private ApiTestError duplicate()
+	{
+		ApiTestError rtn = new ApiTestError();
+		rtn.setLanguageId(this.getLanguageId());
+		rtn.setErrorId(this.getErrorId());
+		rtn.setReason(this.getReason());
+		rtn.setErrorLink(this.getErrorLink());
+		rtn.setHttpStatusCode(this.getHttpStatusCode());
+		return rtn;
+	}
+
+	public static ApiTestError get( String errorId, String languageId )
+	{
+		ApiTestError rtn = errorMap.get(languageId + ":" + errorId);
+		if( (rtn == null) && (DEFAULT_LANGUAGE_Id.equals(languageId) == false) )
+		{
+			rtn = errorMap.get(DEFAULT_LANGUAGE_Id + ":" + errorId);
+		}
+		if( rtn == null )
+		{
+			rtn = new ApiTestError();
+			rtn.setLanguageId(languageId);
+			rtn.setErrorId(errorId);
+			rtn.setHttpStatusCode(javax.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
+		else
+		{
+			rtn = rtn.duplicate();
+		}
+		return rtn;
+	}
+
+	// NOTE: The following are generated code. Please do not edit them manually!
+
+	// @GeneratedCode
+
+	// END of generated code
+}
